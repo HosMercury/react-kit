@@ -24,7 +24,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useState } from "react";
-import ErrorMessage from "../common/ErrorMessage";
+import ErrorMessages from "../common/ErrorMessages";
+import { serverErr } from "../../utils/error";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email format" }),
@@ -45,7 +46,7 @@ const login = async ({
 };
 
 const Login = () => {
-  const [errorMsg, serErrorMsg] = useState("");
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   const navigate = useNavigate();
 
@@ -63,16 +64,8 @@ const Login = () => {
       navigate("/");
     },
     onError: (error: AxiosError) => {
-      console.log(error);
-
-      if (error.response && error.response.data) {
-        const message =
-          (error.response.data as { message?: string }).message ||
-          "An error occurred. Please try again.";
-        serErrorMsg(message);
-      } else {
-        serErrorMsg("Network error. Please check your connection.");
-      }
+      let messages = serverErr(error);
+      setErrorMessages(messages);
     },
   });
 
@@ -80,17 +73,15 @@ const Login = () => {
     mutate(values);
   }
 
-  if (isPending) return <p>Loading ...</p>;
-
   return (
     <GuestLayout>
       <Card>
         <CardHeader>
           <CardTitle>Please Log in</CardTitle>
-          <CardDescription className="invisible">Log in card</CardDescription>
+          <CardDescription>Log in to continue</CardDescription>
         </CardHeader>
         <CardContent className="min-w-[400px]">
-          <ErrorMessage message={errorMsg} />
+          <ErrorMessages errors={errorMessages} />
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
@@ -123,9 +114,13 @@ const Login = () => {
                   </FormItem>
                 )}
               />
-              <div className="flex justify-end">
-                <Button type="submit" className="cursor-pointer w-full">
-                  Submit
+              <div className="flex justify-end ">
+                <Button
+                  type="submit"
+                  className="cursor-pointer w-full"
+                  disabled={isPending}
+                >
+                  {isPending ? "Loading..." : "Submit"}
                 </Button>
               </div>
             </form>

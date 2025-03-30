@@ -24,7 +24,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useState } from "react";
-import ErrorMessage from "../common/ErrorMessage";
+import ErrorMessages from "../common/ErrorMessages";
+import { serverErr } from "../../utils/error";
 
 // Schema validation
 const registerSchema = z
@@ -47,23 +48,26 @@ const register = async ({
   lastName,
   email,
   password,
+  confirmPassword,
 }: {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }) => {
   const response = await api.post("/auth/register", {
     firstName,
     lastName,
     email,
     password,
+    confirmPassword,
   });
   return response.data;
 };
 
 const Register = () => {
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   const navigate = useNavigate();
 
@@ -84,16 +88,7 @@ const Register = () => {
       navigate("/");
     },
     onError: (error: AxiosError) => {
-      console.log(error);
-
-      if (error.response && error.response.data) {
-        const message =
-          (error.response.data as { message?: string }).message ||
-          "An error occurred. Please try again.";
-        setErrorMsg(message);
-      } else {
-        setErrorMsg("Network error. Please check your connection.");
-      }
+      setErrorMessages(serverErr(error));
     },
   });
 
@@ -106,10 +101,10 @@ const Register = () => {
       <Card>
         <CardHeader>
           <CardTitle>Register</CardTitle>
-          <CardDescription>Create an account to continue</CardDescription>
+          <CardDescription>Create an account</CardDescription>
         </CardHeader>
         <CardContent className="min-w-[400px]">
-          <ErrorMessage message={errorMsg} />
+          <ErrorMessages errors={errorMessages} />
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -187,9 +182,13 @@ const Register = () => {
                   </FormItem>
                 )}
               />
-              <div className="flex justify-end">
-                <Button type="submit" className="cursor-pointer w-full">
-                  {isPending ? "Registering..." : "Register"}
+              <div className="flex justify-end ">
+                <Button
+                  type="submit"
+                  className="cursor-pointer w-full"
+                  disabled={isPending}
+                >
+                  {isPending ? "Loading..." : "Submit"}
                 </Button>
               </div>
             </form>

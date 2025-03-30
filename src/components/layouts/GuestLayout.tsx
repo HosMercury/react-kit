@@ -1,4 +1,4 @@
-const GuestLayout = ({ children }: { children: React.ReactElement }) => {
+const GuestLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div
       className="overflow-hidden relative bg-gradient-to-r
