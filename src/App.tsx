@@ -1,20 +1,36 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "./components/routes/Login";
-import Register from "./components/routes/Register";
-import Home from "./components/routes/Home";
+import { lazy, Suspense } from "react";
+import LoadingSpinner from "./components/common/LoadingSpinner";
 
-let router = createBrowserRouter([
+// Lazy-loaded components
+const Home = lazy(() => import("./components/routes/Home"));
+const Login = lazy(() => import("./components/routes/Login"));
+const Register = lazy(() => import("./components/routes/Register"));
+
+const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <Home />
+      </Suspense>
+    ),
   },
   {
     path: "/a/login",
-    element: <Login />,
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <Login />
+      </Suspense>
+    ),
   },
   {
     path: "/a/register",
-    element: <Register />,
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <Register />
+      </Suspense>
+    ),
   },
 ]);
 
