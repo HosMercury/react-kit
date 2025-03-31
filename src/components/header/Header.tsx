@@ -6,7 +6,7 @@ const Header = () => {
     <div className="w-full h-13 p-2 bg-violet-900 text-white px-12">
       <div className="flex justify-between items-center">
         <div className="flex gap-6 items-center">
-          <div>Logo</div>
+          <div className="cursor-pointer">Logo</div>
           {/* menu */}
 
           <div className="flex gap-4">
