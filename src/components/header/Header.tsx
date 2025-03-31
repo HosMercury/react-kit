@@ -26,10 +26,7 @@ const Header = () => {
           <UserMenu />
 
           {/* Hamburger Button (visible on small screens) */}
-          <button
-            className="md:hidden p-2"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
+          <button className="md:hidden " onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? (
               <X size={24} className="cursor-pointer" />
             ) : (
@@ -42,8 +39,10 @@ const Header = () => {
       {/* Mobile Menu (shown when menuOpen is true) */}
       {menuOpen && (
         <div className="md:hidden absolute top-12 left-0 w-full bg-violet-800 p-4 gap-2 flex flex-col z-50 shadow-lg">
-          <div className="cursor-pointer">Home</div>
-          <div className="cursor-pointer">About</div>
+          <div className="flex flex-col gap-6">
+            <div className="cursor-pointer">Home</div>
+            <div className="cursor-pointer">About</div>
+          </div>
         </div>
       )}
     </div>
