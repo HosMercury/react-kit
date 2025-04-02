@@ -1,6 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import LoadingSpinner from "./components/common/LoadingSpinner";
+import OrderCreate from "./components/orders/OrderCreate";
+import ModelIndex from "./components/models/ModelIndex";
 
 // Lazy-loaded components
 const Home = lazy(() => import("./components/routes/Home"));
@@ -13,6 +15,22 @@ const router = createBrowserRouter([
     element: (
       <Suspense fallback={<LoadingSpinner />}>
         <Home />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/m",
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <ModelIndex />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/o/create",
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <OrderCreate />
       </Suspense>
     ),
   },

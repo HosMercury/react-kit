@@ -27,7 +27,7 @@ const UserMenu = () => {
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      await api.post("users/logout");
+      await api.post("auth/logout");
     },
     onSuccess: () => {
       toast.success("Logged out successfully");
@@ -48,7 +48,10 @@ const UserMenu = () => {
       <DropdownMenuTrigger>
         <div className="flex items-center gap-2 cursor-pointer">
           <LuUser className="w-6 h-6" />
-          <span>{user?.firstName}</span>
+          <span>
+            {(user?.firstName?.charAt(0)?.toUpperCase() || "") +
+              (user?.firstName?.slice(1)?.toLowerCase() || "")}
+          </span>
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

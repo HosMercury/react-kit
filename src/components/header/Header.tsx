@@ -2,6 +2,7 @@ import { useState } from "react";
 import UserMenu from "./UserMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import { Menu, X } from "lucide-react"; // Icons for hamburger & close
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -11,11 +12,20 @@ const Header = () => {
       <div className="flex justify-between items-center">
         {/* Left Section */}
         <div className="flex gap-6 items-center ">
-          <div className="cursor-pointer">Logo</div>
+          <div className="cursor-pointer mr-8">Awfarlak</div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex gap-4 ">
-            <div className="cursor-pointer">Home</div>
+            <Link to="/m" className="cursor-pointer">
+              Models
+            </Link>
+            <Link to="/b" className="cursor-pointer">
+              Brands
+            </Link>
+            <Link to="/c" className="cursor-pointer">
+              Components
+            </Link>
+
             <div className="cursor-pointer">About</div>
           </div>
         </div>

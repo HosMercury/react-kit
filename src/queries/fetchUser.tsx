@@ -8,11 +8,12 @@ export type User = {
   firstName: string;
   lastName?: string;
   email: string;
+  createdAt: string;
 };
 
 const fetchUser = async () => {
-  const { data } = await api.get("/users/me");
-  return data as User;
+  const { data } = await api.get("/auth/me");
+  return data.data as User;
 };
 
 export const useUser = () =>
